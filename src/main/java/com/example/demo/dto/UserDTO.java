@@ -1,6 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.dto;
 
-public class UserDto {
+public class UserDTO {
 
     private String username;
     private String password;

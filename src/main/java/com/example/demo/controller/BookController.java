@@ -58,6 +58,8 @@ public class BookController {
 
     @RequestMapping(value = "/takeABook/{id}", method = RequestMethod.GET)
     public ResponseEntity<Book> takeABook(@PathVariable("id") long bookId) {
+
+
         return bookService.takeABook(bookId);
     }
 

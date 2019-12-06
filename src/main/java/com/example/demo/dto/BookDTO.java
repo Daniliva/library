@@ -15,6 +15,10 @@ public class BookDTO {
         reading =     false;
     }
 
+    public BookDTO() {
+
+    }
+
     public boolean isReading() {
         return reading;
     }

@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 
 import com.example.demo.model.User;
-import com.example.demo.model.UserDto;
+import com.example.demo.dto.UserDTO;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     //@Secured({"ROLE_ADMIN"})
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value="/users", method = RequestMethod.GET)
     public List<User> listUser(){
         return userService.findAll();
@@ -26,7 +26,7 @@ public class UserController {
 
     //@Secured("ROLE_USER")
     //@PreAuthorize("hasRole('ROLE_USER')")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public User getOne(@PathVariable(value = "id") Long id)
     {
@@ -35,9 +35,10 @@ public class UserController {
 
 
     @RequestMapping(value="/signup", method = RequestMethod.POST)
-    public User saveUser(@RequestBody UserDto user){
+    public User saveUser(@RequestBody UserDTO user){
         return userService.save(user);
     }
+
 
 
 
