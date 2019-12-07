@@ -1,9 +1,12 @@
 package com.example.demo.service.impl;
 
 
-import com.example.demo.repo.UserRepository;
-import com.example.demo.model.User;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.model.User;
+import com.example.demo.model.journals.JournalUser;
+import com.example.demo.repo.JournalUserRepository;
+import com.example.demo.repo.UserRepository;
+import com.example.demo.service.JournalUserService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,14 +25,19 @@ import java.util.Set;
 
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
-    public UserServiceImpl() {
-    }
-
     @Autowired
     private UserRepository userRepository;
 
+    private JournalUserService journalUserService;
     @Autowired
     private BCryptPasswordEncoder bcryptEncoder;
+    @Autowired
+    private JournalUserRepository journalUserRepository;
+
+    public UserServiceImpl() {
+        journalUserService = new JournalUserService();
+    }
+
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
@@ -52,12 +60,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User save(UserDTO user) {
         User newUser = new User();
-        newUser.setId(lastId()+1);
+        newUser.setId(lastId() + 1);
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         newUser.setAge(user.getAge());
         newUser.setSalary(user.getSalary());
         newUser.setDateRegistration(LocalDate.now());
+        journalUserService.save(newUser);
+        //newUser.setJournalUser(journalUserService.getByUserId(newUser));
+
         return userRepository.save(newUser);
     }
 
@@ -70,8 +81,11 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public void delete(long id) {
         userRepository.deleteById(id);
     }
+
     @Override
-    public long lastId(){return userRepository.lastId();}
+    public long lastId() {
+        return userRepository.lastId();
+    }
 
     public User findOne(String username) {
         return userRepository.findByUsername(username);
@@ -80,8 +94,4 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public User findById(Long id) {
         return userRepository.findById(id).get();
     }
-
-
-
-
 }

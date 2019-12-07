@@ -1,10 +1,12 @@
-package com.example.demo.domain;
+package com.example.demo.model.book;
 
+import com.example.demo.model.journals.JournalBook;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table
@@ -21,9 +23,9 @@ public class Book {
     private String author;
     @JsonView(Views.Genre.class)
     private String genre;
-    @JsonView(Views.Reading.class)
-    private boolean reading;
-
+    @JsonView(Views.Genre.class)
+    @OneToOne(optional = false, mappedBy="book")
+    public JournalBook journalBook;
 
     public Book() {
     }
@@ -32,16 +34,9 @@ public class Book {
         this.name = name;
         this.author = author;
         this.genre = genre;
-        reading = false;
+
     }
 
-    public boolean isReading() {
-        return reading;
-    }
-
-    public void setReading(boolean reading) {
-        this.reading = reading;
-    }
 
     public String getGenre() {
         return genre;
@@ -74,4 +69,6 @@ public class Book {
     public void setAuthor(String autor) {
         this.author = autor;
     }
+
+
 }

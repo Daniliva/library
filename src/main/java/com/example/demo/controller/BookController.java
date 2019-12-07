@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Book;
 import com.example.demo.dto.BookDTO;
+import com.example.demo.model.book.Book;
 import com.example.demo.service.BookService;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,9 @@ public class BookController {
         this.bookService = bookService;
     }
 
+    @Autowired
+    private UserService userService;
+
 
     @GetMapping
     public ResponseEntity<List<Book>> list() {
@@ -29,8 +33,7 @@ public class BookController {
     }
 
     @RequestMapping(value = "/getBook/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Book> getBook(@PathVariable("id") long bookId)
-    {
+    public ResponseEntity<Book> getBook(@PathVariable("id") long bookId) {
         return bookService.getBookById(bookId);
     }
 
@@ -45,7 +48,7 @@ public class BookController {
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Book>
-    updateBook(@RequestBody @Valid BookDTO book,@PathVariable("id")Long bookId) {
+    updateBook(@RequestBody @Valid BookDTO book, @PathVariable("id") Long bookId) {
         return bookService.update(book, bookId);
     }
 
@@ -57,15 +60,13 @@ public class BookController {
 
 
     @RequestMapping(value = "/takeABook/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Book> takeABook(@PathVariable("id") long bookId) {
+    public ResponseEntity<Book> takeABook(@PathVariable("id") long userId, @RequestBody long bookId) {
+        return bookService.takeABook(bookId, userId);
 
-
-        return bookService.takeABook(bookId);
     }
 
     @RequestMapping(value = "/passBook/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Book> passBook(@PathVariable("id") long bookId) {
-
-        return bookService.passBook(bookId);
+    public ResponseEntity<Book> passBook(@PathVariable("id") long userId, @RequestBody long bookId) {
+        return bookService.passBook(bookId, userId);
     }
 }

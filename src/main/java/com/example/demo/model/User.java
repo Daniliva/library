@@ -1,7 +1,8 @@
 package com.example.demo.model;
 
+import com.example.demo.model.journals.JournalBook;
+import com.example.demo.model.journals.JournalUser;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @Column
     private String username;
@@ -25,13 +26,21 @@ public class User {
     private int age;
     @Column
     private LocalDate dateRegistration;
+    @Column
+    private long countBook;
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_ROLES", joinColumns = {
-            @JoinColumn(name = "USER_ID")}, inverseJoinColumns = {
-            @JoinColumn(name = "ROLE_ID")})
+    @JoinTable(name = "USER_ROLES",
+            joinColumns = {
+                    @JoinColumn(name = "USER_ID")},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "ROLE_ID")})
     private Set<Role> roles;
-
-
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private JournalUser journalUser;
+    public User() {
+    }
     public long getId() {
         return id;
     }
@@ -80,9 +89,23 @@ public class User {
         this.roles = roles;
     }
 
-    public User() {
+
+
+  public JournalUser getJournalUser() {
+        return journalUser;
     }
 
+    public void setJournalUser(JournalUser journalUser) {
+        this.journalUser = journalUser;
+    }
+
+    public long getCountBook() {
+        return countBook;
+    }
+
+    public void setCountBook(long countBook) {
+        this.countBook = countBook;
+    }
 
     public LocalDate getDateRegistration() {
         return dateRegistration;
