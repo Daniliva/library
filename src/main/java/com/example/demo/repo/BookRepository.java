@@ -33,11 +33,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             " WHERE b.id=journalBook.book.id and" +
             " journalBook.dateReservation < ?1 AND  " +
             "journalBook.reading=false")
-    List<Book> getFindAllByDate(LocalDate date);//limit 1
-
-
-
-
+    List<Book> getFindAllByDate(LocalDate date);
     @Query("SELECT b FROM  Book b, JournalBook journalBook " +
             " WHERE b.id=journalBook.book.id " +
             "and b.genre=?2 and" +
