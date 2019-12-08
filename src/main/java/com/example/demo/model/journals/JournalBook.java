@@ -1,5 +1,6 @@
 package com.example.demo.model.journals;
 
+import com.example.demo.model.User;
 import com.example.demo.model.book.Book;
 import com.example.demo.model.book.Views;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -12,8 +13,8 @@ public class JournalBook {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @OneToOne(optional = false)
-    @JoinColumn(name="book_id", referencedColumnName="id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
     private Book book;
     @JoinColumn
     private boolean reading;

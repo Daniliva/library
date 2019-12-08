@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookDTO;
+import com.example.demo.model.Role;
 import com.example.demo.model.book.Book;
 import com.example.demo.model.journals.JournalBook;
 import com.example.demo.model.journals.JournalUser;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 
 @Service
@@ -26,12 +29,12 @@ public class BookService {
     private BookRepository bookRepository;
     @Autowired
     private UserService userService;
+    @Autowired
     private JournalBookService journalBookService;
+    @Autowired
     private JournalUserService journalUserService;
 
     public BookService(BookRepository bookRepository) {
-        journalBookService = new JournalBookService();
-        journalUserService = new JournalUserService();
         this.bookRepository = bookRepository;
     }
 
@@ -39,8 +42,6 @@ public class BookService {
     public Book save(BookDTO bookDTO) {
         Book book = new Book(bookDTO.getName(), bookDTO.getAuthor(), bookDTO.getGenre());
         bookRepository.save(book);
-        journalBookService.save(book);
-        book.journalBook = journalBookService.getByBookId(book);
         return book;
     }
 
@@ -95,9 +96,8 @@ public class BookService {
             throw new EntityNotFoundException("id-" + bookId);
         }
         JournalBook journalBook = journalBookService.getByBookId(b.get());
-        journalBook.plusOneToCountTake();
-        LocalDate localDate = LocalDate.now();
-        localDate.plusDays(7);
+        LocalDate localDate =LocalDate.now().plusDays(7);
+        log.info(""+localDate.getDayOfMonth());
         journalBook.setDateReservation(localDate);
         journalBookService.save(journalBook);
         JournalUser journalUser = journalUserService.getByUserId(userService.findById(userId));
@@ -116,6 +116,7 @@ public class BookService {
     }
 
     public List<Book> findAll() {
+        //getFindAllByDate(LocalDate.now())
         return bookRepository.getFindAllByDate(LocalDate.now());
     }
 

@@ -2,9 +2,11 @@ package com.example.demo.service.impl;
 
 
 import com.example.demo.dto.UserDTO;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.model.journals.JournalUser;
 import com.example.demo.repo.JournalUserRepository;
+import com.example.demo.repo.RoleRepository;
 import com.example.demo.repo.UserRepository;
 import com.example.demo.service.JournalUserService;
 import com.example.demo.service.UserService;
@@ -33,6 +35,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private BCryptPasswordEncoder bcryptEncoder;
     @Autowired
     private JournalUserRepository journalUserRepository;
+    @Autowired
+    private RoleRepository roleRepository;
 
     public UserServiceImpl() {
         journalUserService = new JournalUserService();
@@ -60,16 +64,23 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public User save(UserDTO user) {
         User newUser = new User();
-        newUser.setId(lastId() + 1);
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         newUser.setAge(user.getAge());
         newUser.setSalary(user.getSalary());
         newUser.setDateRegistration(LocalDate.now());
-        journalUserService.save(newUser);
-        //newUser.setJournalUser(journalUserService.getByUserId(newUser));
-
-        return userRepository.save(newUser);
+        Role role = roleRepository.getByRoleName("ROLE_ADMIN");//ROLE_USER
+        if (role == null) {
+            role = new Role();
+            role.setName("ROLE_ADMIN");
+            role.setDescription("Admin role");
+            roleRepository.save(role);
+        }
+        Set<Role> setRole = new HashSet<Role>();
+        setRole.add(roleRepository.getByRoleName("ROLE_ADMIN"));
+        newUser.setRoles(setRole);
+        userRepository.save(newUser);
+        return newUser;
     }
 
     public List<User> findAll() {
@@ -82,10 +93,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRepository.deleteById(id);
     }
 
-    @Override
-    public long lastId() {
-        return userRepository.lastId();
-    }
 
     public User findOne(String username) {
         return userRepository.findByUsername(username);

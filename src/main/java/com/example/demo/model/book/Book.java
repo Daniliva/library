@@ -23,9 +23,8 @@ public class Book {
     private String author;
     @JsonView(Views.Genre.class)
     private String genre;
-    @JsonView(Views.Genre.class)
-    @OneToOne(optional = false, mappedBy="book")
-    public JournalBook journalBook;
+
+
 
     public Book() {
     }
@@ -34,7 +33,6 @@ public class Book {
         this.name = name;
         this.author = author;
         this.genre = genre;
-
     }
 
 

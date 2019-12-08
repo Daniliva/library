@@ -3,6 +3,9 @@ package com.example.demo.controller;
 
 import com.example.demo.model.User;
 import com.example.demo.dto.UserDTO;
+import com.example.demo.model.journals.JournalUser;
+import com.example.demo.repo.JournalUserRepository;
+import com.example.demo.service.JournalUserService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,7 +19,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private JournalUserService journalUserService;
+    @Autowired
+    JournalUserRepository journalUserRepository;
     //@Secured({"ROLE_ADMIN"})
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @RequestMapping(value="/users", method = RequestMethod.GET)
@@ -36,10 +42,12 @@ public class UserController {
 
     @RequestMapping(value="/signup", method = RequestMethod.POST)
     public User saveUser(@RequestBody UserDTO user){
-        return userService.save(user);
+        User saveUser= userService.save(user);
+        JournalUser journalUser=new JournalUser();
+        journalUserRepository.save(journalUser);
+        journalUser.setUserId(saveUser);
+        journalUserRepository.save(journalUser);
+        return saveUser;
     }
-
-
-
 
 }

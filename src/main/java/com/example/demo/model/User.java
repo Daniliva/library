@@ -14,6 +14,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column
     private long id;
     @Column
     private String username;
@@ -36,9 +37,9 @@ public class User {
             inverseJoinColumns = {
                     @JoinColumn(name = "ROLE_ID")})
     private Set<Role> roles;
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private JournalUser journalUser;
+  /*  @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL  , fetch = FetchType.LAZY)
+    private JournalUser journalUser;*/
     public User() {
     }
     public long getId() {
@@ -90,14 +91,14 @@ public class User {
     }
 
 
-
+/*
   public JournalUser getJournalUser() {
         return journalUser;
     }
 
     public void setJournalUser(JournalUser journalUser) {
         this.journalUser = journalUser;
-    }
+    }*/
 
     public long getCountBook() {
         return countBook;

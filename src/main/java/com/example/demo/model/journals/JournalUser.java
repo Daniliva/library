@@ -5,6 +5,7 @@ import com.example.demo.model.User;
 import com.example.demo.model.book.Book;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 @Entity
 @Table
@@ -12,9 +13,10 @@ public class JournalUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private long id;
-    @OneToOne(optional = false)
-    @JoinColumn(name="user_id", unique = true, nullable = false, updatable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn
     private User userId;
 
 
@@ -33,6 +35,8 @@ public class JournalUser {
                     @JoinColumn(name = "BOOK_ID", referencedColumnName="id")})
     private Set<Book> booksReservation;
     public JournalUser() {
+        booksReservation  = new HashSet<Book>();
+        books = new HashSet<Book>();
     }
 
     public long getId() {
