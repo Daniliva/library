@@ -62,7 +62,18 @@ public class BookController {
         journalBookRepository.save(journalBook);
         return ResponseEntity.status(201).body(b);
     }
-
+    @RequestMapping(value = "/createmass/{count}", method = RequestMethod.POST)
+    public ResponseEntity<Book> createMassBook(@RequestBody BookDTO book,@PathVariable("count")long count) {
+        Book b= bookService.save(book) ;
+        for(int i=1;i<count;i++)
+        {  b = bookService.save(book);
+        JournalBook journalBook=new JournalBook();
+        journalBookRepository.save(journalBook);
+        journalBook.setBook(b);
+        journalBook.setDateReservation(LocalDate.now());
+        journalBookRepository.save(journalBook);}
+        return ResponseEntity.status(201).body(b);
+    }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Book>
@@ -73,6 +84,7 @@ public class BookController {
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Book> deleteBook(@PathVariable("id") Long personId) {
+        //требуеться модификация, вместо delete boolean
         return bookService.delete(personId);
     }
 
@@ -95,14 +107,14 @@ public class BookController {
         return bookService.takeAReservation(bookId, user.getId());
     }
 
-    @RequestMapping(value = "/passAReservation/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/passAReservation", method = RequestMethod.GET)
     public ResponseEntity<Book> passAReservation( @RequestBody long bookId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
         User user =userService.findOne(userDetails.getUsername());
         return bookService.passAReservation(bookId,  user.getId());
     }
-    @RequestMapping(value = "/genre/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/genre", method = RequestMethod.GET)
     public ResponseEntity<List<Book>> listGenre(@RequestBody String bookGenre) {
         List<Book> books = bookService.findAll();
         return ResponseEntity.ok().body(books);
