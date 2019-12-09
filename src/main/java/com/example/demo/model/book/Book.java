@@ -1,6 +1,7 @@
 package com.example.demo.model.book;
 
 import com.example.demo.model.journals.JournalBook;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -23,7 +24,8 @@ public class Book {
     private String author;
     @JsonView(Views.Genre.class)
     private String genre;
-
+    @JsonIgnore
+    private boolean delete;
 
 
     public Book() {
@@ -33,6 +35,7 @@ public class Book {
         this.name = name;
         this.author = author;
         this.genre = genre;
+        delete=false;
     }
 
 
@@ -68,5 +71,11 @@ public class Book {
         this.author = autor;
     }
 
+    public boolean isDelete() {
+        return delete;
+    }
 
+    public void setDelete(boolean delete) {
+        this.delete = delete;
+    }
 }

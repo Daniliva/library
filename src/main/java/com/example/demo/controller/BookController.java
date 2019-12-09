@@ -7,6 +7,7 @@ import com.example.demo.model.journals.JournalBook;
 import com.example.demo.model.journals.JournalUser;
 import com.example.demo.repo.BookRepository;
 import com.example.demo.repo.JournalBookRepository;
+import com.example.demo.repo.UserRepository;
 import com.example.demo.service.BookService;
 import com.example.demo.service.JournalBookService;
 import com.example.demo.service.UserService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("Book")
@@ -38,10 +40,12 @@ public class BookController {
     private JournalBookService journalBookService;
     @Autowired
     private BookRepository bookRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
-    public ResponseEntity<List<Book>> list() {
-        List<Book> books = bookService.findAll();
+    public ResponseEntity<Set<Book>> list() {
+        Set<Book> books = bookService.findAll();
         return ResponseEntity.ok().body(books);
     }
 
@@ -58,20 +62,21 @@ public class BookController {
         JournalBook journalBook=new JournalBook();
         journalBookRepository.save(journalBook);
         journalBook.setBook(b);
-        journalBook.setDateReservation(LocalDate.now());
+        journalBook.setDateReservation(LocalDate.now().minusDays(1));
         journalBookRepository.save(journalBook);
         return ResponseEntity.status(201).body(b);
     }
     @RequestMapping(value = "/createmass/{count}", method = RequestMethod.POST)
     public ResponseEntity<Book> createMassBook(@RequestBody BookDTO book,@PathVariable("count")long count) {
+
         Book b= bookService.save(book) ;
-        for(int i=1;i<count;i++)
-        {  b = bookService.save(book);
         JournalBook journalBook=new JournalBook();
         journalBookRepository.save(journalBook);
         journalBook.setBook(b);
-        journalBook.setDateReservation(LocalDate.now());
-        journalBookRepository.save(journalBook);}
+        journalBook.setDateReservation(LocalDate.now().minusDays(1));
+        journalBookRepository.save(journalBook);
+        for(int i=1;i<count;i++)
+        {   createBook(book);}
         return ResponseEntity.status(201).body(b);
     }
 
@@ -115,8 +120,8 @@ public class BookController {
         return bookService.passAReservation(bookId,  user.getId());
     }
     @RequestMapping(value = "/genre", method = RequestMethod.GET)
-    public ResponseEntity<List<Book>> listGenre(@RequestBody String bookGenre) {
-        List<Book> books = bookService.findAll();
+    public ResponseEntity<List<Object>> listGenre(@RequestBody String bookGenre) {
+        List<Object> books = bookRepository.getFindAll(LocalDate.now());
         return ResponseEntity.ok().body(books);
     }
 }

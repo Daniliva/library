@@ -21,4 +21,6 @@ public final class Views {
     }
     public interface CountTake extends Id {
     }
+    public interface Delete extends Id {
+    }
 }

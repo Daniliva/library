@@ -115,7 +115,7 @@ public class BookService {
         return ResponseEntity.ok().body(bookRepository.save(b.get()));
     }
 
-    public List<Book> findAll() {
+    public Set<Book> findAll() {
         //getFindAllByDate(LocalDate.now())
         return bookRepository.getFindAllByDate(LocalDate.now());
     }
@@ -126,7 +126,7 @@ public class BookService {
         if (!p.isPresent()) {
             throw new EntityNotFoundException("id-" + personId);
         }
-        bookRepository.deleteById(personId);
+        bookRepository.findBookById(personId).setDelete(true);
         return ResponseEntity.ok().body(p.get());
     }
 }
