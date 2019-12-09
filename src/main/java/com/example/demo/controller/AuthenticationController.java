@@ -60,7 +60,6 @@ public class AuthenticationController {
                 .getPrincipal();
         String username = userDetails.getUsername();
         return userService.findOne(userDetails.getUsername());//userService.findOne(jwtTokenUtil.getUsernameFromToken(token));
-
     }
 
 }

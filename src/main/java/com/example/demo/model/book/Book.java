@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.time.LocalDate;
 
 @Entity
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Null
     @JsonView(Views.Id.class)
     private Long id;
     @JsonView(Views.Name.class)
@@ -24,6 +26,7 @@ public class Book {
     private String author;
     @JsonView(Views.Genre.class)
     private String genre;
+    @Null
     @JsonIgnore
     private boolean delete;
 
