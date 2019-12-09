@@ -53,7 +53,7 @@ public class AuthenticationController {
 
         }
     }
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value="/usersname", method = RequestMethod.POST)
     public User User(){
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()

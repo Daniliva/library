@@ -13,11 +13,6 @@ public class JournalUserService {
     @Autowired
     private JournalUserRepository journalUserRepository;
 
-    public void save(User newUser) {
-        JournalUser journalUser = new JournalUser();
-        journalUser.setUserId(newUser);
-        journalUserRepository.save(journalUser);
-    }
     public void save(JournalUser journalUser) {
         journalUserRepository.save(journalUser);
     }

@@ -39,7 +39,7 @@ public class UserController {
         return userService.findById(id);
     }
 
-
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value="/signup", method = RequestMethod.POST)
     public User saveUser(@RequestBody UserDTO user){
         User saveUser= userService.save(user);

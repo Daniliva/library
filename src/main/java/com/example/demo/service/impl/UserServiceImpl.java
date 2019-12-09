@@ -69,15 +69,15 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         newUser.setAge(user.getAge());
         newUser.setSalary(user.getSalary());
         newUser.setDateRegistration(LocalDate.now());
-        Role role = roleRepository.getByRoleName("ROLE_ADMIN");//ROLE_USER
+        Role role = roleRepository.getByRoleName("ROLE_USER");
         if (role == null) {
             role = new Role();
-            role.setName("ROLE_ADMIN");
-            role.setDescription("Admin role");
+            role.setName("ROLE_USER");
+            role.setDescription("User role");
             roleRepository.save(role);
         }
         Set<Role> setRole = new HashSet<Role>();
-        setRole.add(roleRepository.getByRoleName("ROLE_ADMIN"));
+        setRole.add(roleRepository.getByRoleName("ROLE_USER"));
         newUser.setRoles(setRole);
         userRepository.save(newUser);
         return newUser;

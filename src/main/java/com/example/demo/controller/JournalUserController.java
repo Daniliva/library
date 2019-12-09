@@ -8,6 +8,7 @@ import com.example.demo.service.JournalUserService;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,7 @@ public class JournalUserController {
     @Autowired
     JournalUserRepository journalUserRepository;
 
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<JournalUser> getJournalUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -33,6 +35,8 @@ public class JournalUserController {
         return ResponseEntity.ok().body(journalUserService.getByUserId(user));
 
     }
+
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/takeAll", method = RequestMethod.GET)
     public List<JournalUser> takeAReservation() {
         return journalUserRepository.findAll();

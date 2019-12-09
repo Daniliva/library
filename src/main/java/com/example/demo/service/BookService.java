@@ -116,7 +116,6 @@ public class BookService {
     }
 
     public Set<Book> findAll() {
-        //getFindAllByDate(LocalDate.now())
         return bookRepository.getFindAllByDate(LocalDate.now());
     }
 

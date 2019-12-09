@@ -16,11 +16,6 @@ public class JournalBookService {
     @Autowired
     private BookService bookService;
 
-    public void save(Book book) {
-        JournalBook journalBook = new JournalBook();
-        journalBook.setBook(book);
-        save(journalBook);
-    }
 
     public void save(JournalBook journalBook) {
         journalBookRepository.save(journalBook);
