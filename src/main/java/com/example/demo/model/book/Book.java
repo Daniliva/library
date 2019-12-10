@@ -82,10 +82,10 @@ public class Book {
 
     @Override
     public int hashCode() {
-        String n=name;
-        String a=author;
-        String g=genre;
-        return n.hashCode() + a.hashCode() + g.hashCode();
+        String nameValue=name;
+        String authorValue=author;
+        String genreValue=genre;
+        return nameValue.hashCode() + authorValue.hashCode() + genreValue.hashCode();
     }
 
     @Override
