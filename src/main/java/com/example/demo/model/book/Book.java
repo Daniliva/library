@@ -1,6 +1,5 @@
 package com.example.demo.model.book;
 
-import com.example.demo.model.journals.JournalBook;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import lombok.EqualsAndHashCode;
@@ -8,7 +7,6 @@ import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Null;
-import java.time.LocalDate;
 
 @Entity
 @Table
@@ -38,7 +36,7 @@ public class Book {
         this.name = name;
         this.author = author;
         this.genre = genre;
-        delete=false;
+        delete = false;
     }
 
 
@@ -80,5 +78,35 @@ public class Book {
 
     public void setDelete(boolean delete) {
         this.delete = delete;
+    }
+
+    @Override
+    public int hashCode() {
+        String n=name;
+        String a=author;
+        String g=genre;
+        return n.hashCode() + a.hashCode() + g.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) {
+            return false;
+        }
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof Book)) {
+            return false;
+        }
+        Book otherMyClass = (Book) other;
+        if (this.name.equals(otherMyClass.name)) {
+            if (this.author.equals(otherMyClass.author)) {
+                if (this.genre.equals(otherMyClass.genre)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

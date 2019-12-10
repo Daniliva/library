@@ -12,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +26,8 @@ import java.util.Set;
 public class BookService {
 
     private Logger log = LoggerFactory.getLogger(BookService.class);
-
+    @PersistenceContext
+    private EntityManager entityManager;
     @Autowired
     private BookRepository bookRepository;
     @Autowired
@@ -115,7 +118,8 @@ public class BookService {
         return ResponseEntity.ok().body(bookRepository.save(b.get()));
     }
 
-    public Set<Book> findAll() {
+    public List<Book> findAll() {
+
         return bookRepository.getFindAllByDate(LocalDate.now());
     }
 

@@ -1,12 +1,10 @@
 package com.example.demo.model.journals;
 
-import com.example.demo.model.User;
 import com.example.demo.model.book.Book;
-import com.example.demo.model.book.Views;
-import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+
 @Entity
 @Table
 public class JournalBook {
@@ -26,7 +24,7 @@ public class JournalBook {
     private Long countTake;
 
     public JournalBook() {
-        countTake=(long)0;
+        countTake = (long) 0;
     }
 
     public LocalDate getDateReservation() {
@@ -76,5 +74,8 @@ public class JournalBook {
     public void setBook(Book book) {
         this.book = book;
     }
-    public void plusOneToCountTake(){countTake++;}
+
+    public void plusOneToCountTake() {
+        countTake++;
+    }
 }

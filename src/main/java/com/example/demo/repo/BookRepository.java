@@ -17,53 +17,64 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b, JournalBook journalBook " +
             " WHERE b.delete=false and b.id=journalBook.book.id " +
-            "and b.genre=?2 and" +
+            "AND b.genre=?2 AND" +
             " journalBook.dateReservation < ?1 AND  journalBook.reading=false")
-    List<Book> getFindAllByDateAndGenre(LocalDate date, String Genre);
+    List<Book> getFindAllByDateAndGenre(LocalDate date, String genre);
 
     @Query("SELECT b FROM Book b, JournalBook journalBook " +
             " WHERE b.delete=false and b.id=journalBook.book.id " +
-            "and b.author=?2 and" +
+            "and b.author=?2 AND" +
             " journalBook.dateReservation < ?1 AND  journalBook.reading=false")
-    List<Book> getFindAllByDateAndAuthor(LocalDate date, String Author);
+    List<Book> getFindAllByDateAndAuthor(LocalDate date, String author);
 
     @Query("SELECT b FROM Book b, JournalBook journalBook " +
             " WHERE  b.delete=false and b.id=journalBook.book.id " +
-            "and b.author=?2 and b.genre=?3 and" +
+            "and b.author=?2 and b.genre=?3 AND" +
             " journalBook.dateReservation < ?1 AND  journalBook.reading=false")
-    List<Book> getFindAllByDateAndAuthorGenre(LocalDate date, String Author, String Genre);
+    List<Book> getFindAllByDateAndAuthorGenre(LocalDate date, String author, String genre);
 
-    @Query("SELECT  b  FROM Book b, JournalBook journalBook " +
+    @Query("SELECT   b FROM Book b, JournalBook journalBook " +
             " WHERE b.delete=false " +
-            "and b.id=journalBook.book.id and " +
-            "journalBook.dateReservation < ?1 and journalBook.reading=false "
+            "AND b.id=journalBook.book.id AND " +
+            "journalBook.dateReservation < ?1 AND journalBook.reading=false GROUP BY b.id"
     )
-    Set<Book> getFindAllByDate(LocalDate date);
+    List<Book> getFindAllByDate(LocalDate date);
 
     @Query("SELECT b FROM  Book b, JournalBook journalBook " +
             " WHERE b.delete=false" +
-            " and b.id=journalBook.book.id " +
-            "and b.genre=?2 and" +
+            " AND b.id=journalBook.book.id " +
+            "AND b.genre=?2 AND" +
             " journalBook.dateReservation < ?1 AND journalBook.reading=false")
-    Book findFindAllByDateAndGenre(LocalDate date, String Genre);
+    Book findFindAllByDateAndGenre(LocalDate date, String genre);
 
     @Query("SELECT b FROM Book b, JournalBook journalBook " +
             " WHERE b.id=journalBook.book.id " +
-            "and b.author=?2 and" +
+            "AND b.author=?2 AND" +
             " journalBook.dateReservation < ?1 AND  journalBook.reading=false")
-    Book findFindAllByDateAndAuthor(LocalDate date, String Author);
+    Book findFindAllByDateAndAuthor(LocalDate date, String author);
 
     @Query("SELECT b FROM Book b, JournalBook journalBook " +
             " WHERE b.id=journalBook.book.id " +
-            "and b.author=?2 and b.genre=?3 and" +
+            "AND b.author=?2 AND b.genre=?3 AND" +
             " journalBook.dateReservation < ?1 AND  journalBook.reading=false")
-    Book findFindAllByDateAndAuthorGenre(LocalDate date, String Author, String Genre);
+    Book findFindAllByDateAndAuthorGenre(LocalDate date, String author, String genre);
 
     @Query("SELECT DISTINCT b.name,  b.author, b.genre  FROM Book b, JournalBook journalBook " +
             " WHERE b.delete=false " +
-            "and b.id=journalBook.book.id and " +
-            "journalBook.dateReservation < ?1 and journalBook.reading=false "
-
+            "AND b.id=journalBook.book.id AND " +
+            "journalBook.dateReservation < ?1 AND journalBook.reading=false "
     )
     List<String> getFindAll(LocalDate date);
+
+    @Query(value = "SELECT b.id, author, b.delete, genre, name  FROM book b, journal_book journal_book " +
+            " WHERE b.delete=false " +
+            "AND b.id=journal_book.book_id " +
+            "AND journal_book.date_reservation < ?1 " +
+            "AND journal_book.reading=false " +
+            "AND b.name=?2 " +
+            "AND b.author=?3 " +
+            "AND b.genre=?4 ",
+            nativeQuery = true)
+    List<Book> getFindAllByDateAuthorGenreAndName(LocalDate date,String name, String author, String genre);
+
 }

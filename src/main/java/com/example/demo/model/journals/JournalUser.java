@@ -7,6 +7,7 @@ import com.example.demo.model.book.Book;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity
 @Table
 public class JournalUser {
@@ -23,27 +24,26 @@ public class JournalUser {
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_BOOK",
             joinColumns = {
-                    @JoinColumn(name = "USER_ID", referencedColumnName="id")},
+                    @JoinColumn(name = "USER_ID", referencedColumnName = "id")},
             inverseJoinColumns = {
-                    @JoinColumn(name = "BOOK_ID", referencedColumnName="id")})
+                    @JoinColumn(name = "BOOK_ID", referencedColumnName = "id")})
     private Set<Book> books;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "USER_BOOK_Reservation",
             joinColumns = {
-                    @JoinColumn(name = "USER_ID", referencedColumnName="id")},
+                    @JoinColumn(name = "USER_ID", referencedColumnName = "id")},
             inverseJoinColumns = {
-                    @JoinColumn(name = "BOOK_ID", referencedColumnName="id")})
+                    @JoinColumn(name = "BOOK_ID", referencedColumnName = "id")})
     private Set<Book> booksReservation;
+
     public JournalUser() {
-        booksReservation  = new HashSet<Book>();
+        booksReservation = new HashSet<Book>();
         books = new HashSet<Book>();
     }
 
     public long getId() {
         return id;
     }
-
-
 
     public void setId(long id) {
         this.id = id;

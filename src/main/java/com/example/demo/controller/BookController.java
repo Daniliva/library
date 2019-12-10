@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -47,8 +48,8 @@ public class BookController {
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<Set<Book>> list() {
-        Set<Book> books = bookService.findAll();
-        return ResponseEntity.ok().body(books);
+        Set<Book> books1 = new HashSet<Book>(bookService.findAll());
+        return ResponseEntity.ok().body(books1);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
@@ -74,11 +75,6 @@ public class BookController {
     @RequestMapping(value = "/create_mass/{count}", method = RequestMethod.POST)
     public ResponseEntity<Book> createMassBook(@RequestBody BookDTO book, @PathVariable("count") long count) {
         Book b = bookService.save(book);
-        JournalBook journalBook = new JournalBook();
-        journalBookRepository.save(journalBook);
-        journalBook.setBook(b);
-        journalBook.setDateReservation(LocalDate.now().minusDays(1));
-        journalBookRepository.save(journalBook);
         for (int i = 1; i < count; i++) {
             createBook(book);
         }
@@ -153,7 +149,7 @@ public class BookController {
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/author_and_genre", method = RequestMethod.POST)
     public ResponseEntity<List<Book>> listAuthorAndGenre(@RequestBody String author, @RequestBody String genre) {
-        List<Book> books = bookRepository.getFindAllByDateAndAuthorGenre(LocalDate.now(), author,genre);
+        List<Book> books = bookRepository.getFindAllByDateAndAuthorGenre(LocalDate.now(), author, genre);
         return ResponseEntity.ok().body(books);
     }
 

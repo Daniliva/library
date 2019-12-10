@@ -37,37 +37,37 @@ public class JournalBookController {
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/popular", method = RequestMethod.GET)
-    public List<Book> takeByMostPopularBook() {
+    public List<JournalBook> takeByMostPopularBook() {
         return journalBookRepository.getByMostPopularBook();
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/notpopular", method = RequestMethod.GET)
-    public List<Book> takeByNotPopularBook() {
+    public List<JournalBook> takeByNotPopularBook() {
         return journalBookRepository.getByNotPopularBook();
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/popularauthor", method = RequestMethod.POST)
-    public List<Book> takeByMostPopularBookAuthor(@RequestBody String author) {
+    public List<JournalBook> takeByMostPopularBookAuthor(@RequestBody String author) {
         return journalBookRepository.getByMostPopularBookOfAuthor(author);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/notpopularauthor", method = RequestMethod.POST)
-    public List<Book> takeByNotPopularBookAuthor(@RequestBody String author) {
+    public List<JournalBook> takeByNotPopularBookAuthor(@RequestBody String author) {
         return journalBookRepository.getByNotPopularBookOfAuthor(author);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/populargenre", method = RequestMethod.POST)
-    public List<Book> takeByMostPopularBookGenre(@RequestBody String genre) {
+    public List<JournalBook> takeByMostPopularBookGenre(@RequestBody String genre) {
         return journalBookRepository.getByMostPopularBookOfGenre(genre);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/notpopulargenre", method = RequestMethod.POST)
-    public List<Book> takeByNotPopularBookGenre(@RequestBody String genre) {
+    public List<JournalBook> takeByNotPopularBookGenre(@RequestBody String genre) {
         return journalBookRepository.getByNotPopularBookOfGenre(genre);
     }
 }
