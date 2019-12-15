@@ -36,7 +36,7 @@ public class JournalUserController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/takeAll", method = RequestMethod.GET)
     public List<JournalUser> takeAReservation() {
         return journalUserRepository.findAll();

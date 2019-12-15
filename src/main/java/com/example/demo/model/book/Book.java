@@ -10,12 +10,11 @@ import javax.validation.constraints.Null;
 
 @Entity
 @Table
-@ToString(of = {"id", "name", "author", "genre", "reading"})
+@ToString(of = {"id", "name", "author", "genre"})
 @EqualsAndHashCode(of = {"id"})
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Null
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.Id.class)
     private Long id;
     @JsonView(Views.Name.class)
@@ -24,7 +23,7 @@ public class Book {
     private String author;
     @JsonView(Views.Genre.class)
     private String genre;
-    @Null
+
     @JsonIgnore
     private boolean delete;
 
@@ -36,9 +35,8 @@ public class Book {
         this.name = name;
         this.author = author;
         this.genre = genre;
-        delete = false;
+        delete=false;
     }
-
 
     public String getGenre() {
         return genre;
@@ -99,10 +97,10 @@ public class Book {
         if (!(other instanceof Book)) {
             return false;
         }
-        Book otherMyClass = (Book) other;
-        if (this.name.equals(otherMyClass.name)) {
-            if (this.author.equals(otherMyClass.author)) {
-                if (this.genre.equals(otherMyClass.genre)) {
+        Book bookOther = (Book) other;
+        if (this.name.equals(bookOther.name)) {
+            if (this.author.equals(bookOther.author)) {
+                if (this.genre.equals(bookOther.genre)) {
                     return true;
                 }
             }

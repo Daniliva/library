@@ -49,8 +49,6 @@ public class AuthenticationController {
         } catch (ExpiredJwtException e) {
             throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "don't" + loginUser.getUsername() + loginUser.getPassword()
             );
-
-
         }
     }
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")

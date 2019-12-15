@@ -1,11 +1,13 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.BookDTO;
-import com.example.demo.model.Role;
+import com.example.demo.model.User;
 import com.example.demo.model.book.Book;
+import com.example.demo.model.journals.BookReservation;
 import com.example.demo.model.journals.JournalBook;
 import com.example.demo.model.journals.JournalUser;
 import com.example.demo.repo.BookRepository;
+import com.example.demo.repo.ReservationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 
 @Service
@@ -36,6 +36,8 @@ public class BookService {
     private JournalBookService journalBookService;
     @Autowired
     private JournalUserService journalUserService;
+    @Autowired
+    private ReservationRepository reservationRepository;
 
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
@@ -44,6 +46,7 @@ public class BookService {
 
     public Book save(BookDTO bookDTO) {
         Book book = new Book(bookDTO.getName(), bookDTO.getAuthor(), bookDTO.getGenre());
+
         bookRepository.save(book);
         return book;
     }
@@ -74,12 +77,18 @@ public class BookService {
             throw new EntityNotFoundException("id-" + bookId);
         }
         JournalBook journalBook = journalBookService.getByBookId(b.get());
-        journalBook.setReading(true);
-        journalBook.plusOneToCountTake();
-        journalBookService.save(journalBook);
-        JournalUser journalUser = journalUserService.getByUserId(userService.findById(userId));
-        journalUser.getBooks().add(b.get());
-        return ResponseEntity.ok().body(bookRepository.save(b.get()));
+        if (journalBookService.canTakeABook(journalBook, userId)) {
+            if (reservationRepository.getBookReservationForDateBookAndUserId(LocalDate.now(), bookId, userId).size() > 0) {
+                passAReservation(bookId, userId);
+            }
+            journalBook.plusOneToCountTake();
+            journalBookService.save(journalBook);
+            JournalUser journalUser = journalUserService.getByUserId(userService.findById(userId));
+            journalUser.getBooks().add(b.get());
+            return ResponseEntity.ok().body(bookRepository.save(b.get()));
+        } else {
+            throw new EntityNotFoundException("book id-" + bookId + "now reservation or read");
+        }
     }
 
     public ResponseEntity<Book> passBook(long bookId, long userId) {
@@ -88,39 +97,63 @@ public class BookService {
             throw new EntityNotFoundException("id-" + bookId);
         }
         JournalBook journalBook = journalBookService.getByBookId(b.get());
-        journalBook.setReading(false);
+        journalBook.minusOneToCountTake();
         journalBookService.save(journalBook);
+        JournalUser journalUser = journalUserService.getByUserId(userService.findById(userId));
+        journalUser.getBooks().remove(b.get());
         return ResponseEntity.ok().body(b.get());
     }
 
     public ResponseEntity<Book> takeAReservation(long bookId, long userId) {
         Optional<Book> b = bookRepository.findById(bookId);
+        User user = userService.findById(userId);
         if (!b.isPresent()) {
-            throw new EntityNotFoundException("id-" + bookId);
+            throw new EntityNotFoundException("book id-" + bookId);
+        } else if (user == null) {
+            throw new EntityNotFoundException("user id-" + userId);
         }
         JournalBook journalBook = journalBookService.getByBookId(b.get());
-        LocalDate localDate =LocalDate.now().plusDays(7);
-        log.info(""+localDate.getDayOfMonth());
-        journalBook.setDateReservation(localDate);
-        journalBookService.save(journalBook);
-        JournalUser journalUser = journalUserService.getByUserId(userService.findById(userId));
-        journalUser.getBooksReservation().add(b.get());
-        return ResponseEntity.ok().body(bookRepository.save(b.get()));
+        JournalUser journalUser = journalUserService.getByUserId(user);
+        if (journalBookService.canReservation(journalBook, userId)) {
+            LocalDate localDate = LocalDate.now().plusDays(7);
+            BookReservation bookReservation = new BookReservation();
+            bookReservation.setBook(b.get());
+            bookReservation.setUser(user);
+            bookReservation.setDateReservation(localDate);
+            reservationRepository.save(bookReservation);
+            journalUser.getBooksReservation().add(b.get());
+            journalUserService.save(journalUser);
+            return ResponseEntity.ok().body(bookRepository.save(b.get()));
+        } else {
+            throw new EntityNotFoundException("book id-" + bookId + "now reservation or read");
+        }
     }
-    public ResponseEntity<Book>passAReservation(long bookId, long userId) {
+
+    public ResponseEntity<Book> passAReservation(long bookId, long userId) {
         Optional<Book> b = bookRepository.findById(bookId);
+        User user = userService.findById(userId);
         if (!b.isPresent()) {
-            throw new EntityNotFoundException("id-" + bookId);
+            throw new EntityNotFoundException("book id-" + bookId);
+        } else if (user == null) {
+            throw new EntityNotFoundException("user id-" + userId);
         }
         JournalBook journalBook = journalBookService.getByBookId(b.get());
-        journalBook.getDateReservation().minusDays(7);
-        journalBookService.save(journalBook);
+        if (journalBookService.canPassAReservation(journalBook, userId)
+        ) {
+            List<BookReservation> bookReservation =
+                    reservationRepository.getBookReservationForDateBookAndUserId(LocalDate.now(), bookId, userId);
+            for (int i = 0; i < bookReservation.size(); i++) {
+                bookReservation.get(i).setDateReservation(LocalDate.now().minusDays((long) 1));
+
+            }
+            reservationRepository.saveAll(bookReservation);
+        }
+
         return ResponseEntity.ok().body(bookRepository.save(b.get()));
     }
 
     public List<Book> findAll() {
-
-        return bookRepository.getFindAllByDate(LocalDate.now());
+        return bookRepository.getFindAll();
     }
 
     public ResponseEntity<Book> delete(Long personId)

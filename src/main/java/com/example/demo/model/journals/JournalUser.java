@@ -13,7 +13,7 @@ import java.util.Set;
 public class JournalUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private long id;
     @OneToOne(cascade = CascadeType.ALL)
@@ -29,7 +29,7 @@ public class JournalUser {
                     @JoinColumn(name = "BOOK_ID", referencedColumnName = "id")})
     private Set<Book> books;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "USER_BOOK_Reservation",
+    @JoinTable(name = "USER_BOOK_RESERVATION",
             joinColumns = {
                     @JoinColumn(name = "USER_ID", referencedColumnName = "id")},
             inverseJoinColumns = {

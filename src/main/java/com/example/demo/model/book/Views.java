@@ -12,4 +12,6 @@ public final class Views {
 
     public interface Genre extends Id {
     }
+    public interface Count extends Id {
+    }
 }

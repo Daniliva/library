@@ -1,31 +1,33 @@
 package com.example.demo.dto;
 
-public class BookDTO {
-
+public class BookAnswerDTO {
     private Long     id;
     private String   name;
     private String   author;
     private String   genre;
-   // private boolean  reading;
     private Long     count;
-    public BookDTO(String name, String author, String genre) {
+    private Long     countTake;
+    private Long     countReservation;
+    private boolean  reading;
+
+    public BookAnswerDTO(String name, String author, String genre) {
         this.name =   name;
         this.author = author;
         this.genre =  genre;
-       // reading =     false;
+        reading =     false;
     }
 
-    public BookDTO() {
+    public BookAnswerDTO() {
 
     }
 
-   /* public boolean isReading() {
+    public boolean isReading() {
         return reading;
     }
 
     public void setReading(boolean reading) {
         this.reading = reading;
-    }*/
+    }
 
     public String getGenre() {
         return genre;
@@ -67,14 +69,33 @@ public class BookDTO {
         this.count = count;
     }
 
+    public Long getCountReservation() {
+        return countReservation;
+    }
+
+    public void setCountReservation(Long countReservation) {
+        this.countReservation = countReservation;
+    }
+
+    public Long getCountTake() {
+        return countTake;
+    }
+
+    public void setCountTake(Long countTake) {
+        this.countTake = countTake;
+    }
+
     @Override
     public String toString() {
-        return "BookDTO{" +
-                "id = " + id +
+        return "BookAnswerDTO{" +
+                ", id = '" + id + '\'' +
                 ", name = '" + name + '\'' +
-                ", author = '" + author + '\'' +
-                ", genre = '" + genre + '\'' +
-              //  ", surname = '" + reading + '\'' +
+                ", surname = '" + author + '\'' +
+                ", surname = '" + genre + '\'' +
+                ", surname = '" + reading + '\'' +
+                ", count = '" + count + '\'' +
+                ", countTake = '" + countTake + '\'' +
+                ", countReservation = '" + countReservation + '\'' +
                 '}';
     }
 }
