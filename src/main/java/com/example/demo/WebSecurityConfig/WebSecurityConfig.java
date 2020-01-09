@@ -58,13 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("JournalUser/takeAll","JournalUser",
                         "/create","/update/*","/delete/*","/takeABook/*","/passBook/*",
                         "/activate_email/*","/deactivate_email/*")
-                .hasRole("ROLE_ADMIN")
+                .hasAnyRole("ROLE_ADMIN")
                 .antMatchers("/users" ,"/token/usersname",
                         "/user/*", "/author_and_genre","JournalBook/info/*",
                         " /passAReservation","/genre" ,"/author" ,"/author_and_genre","/takeAReservation/*")
                 .hasAnyRole("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers("/get_super_admin_role/*", " /get_user_role/*", "/get_admin_role/*")
-                .hasRole("ROLE_SUPER_ADMIN")
+                .hasAnyRole("ROLE_SUPER_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
