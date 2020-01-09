@@ -1,4 +1,4 @@
-package com.example.demo.service.validator;
+package com.example.demo.service.string;
 
 import org.apache.commons.codec.digest.DigestUtils;
 

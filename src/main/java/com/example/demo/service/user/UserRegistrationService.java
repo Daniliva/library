@@ -1,12 +1,11 @@
 package com.example.demo.service.user;
 
 import com.example.demo.dto.UserDTO;
-import com.example.demo.model.autorization.AuthToken;
 import com.example.demo.model.autorization.User;
 import com.example.demo.model.autorization.UserRegistration;
 import com.example.demo.repository.user.UserRegistrationRepository;
-import com.example.demo.service.MessageSendService;
-import com.example.demo.service.validator.StringService;
+import com.example.demo.service.mail.MessageSendService;
+import com.example.demo.service.string.StringService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

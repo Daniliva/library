@@ -6,17 +6,14 @@ public class BookDTO {
     private String   name;
     private String   author;
     private String   genre;
-   // private boolean  reading;
     private Long     count;
     public BookDTO(String name, String author, String genre) {
         this.name =   name;
         this.author = author;
         this.genre =  genre;
-       // reading =     false;
     }
 
     public BookDTO() {
-
     }
 
     public String getGenre() {

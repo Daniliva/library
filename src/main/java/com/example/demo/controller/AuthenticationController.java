@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/token")
 public class AuthenticationController {
-    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -37,8 +36,7 @@ public class AuthenticationController {
     private TokenProvider jwtTokenUtil;
     @Autowired
     private UserRegistrationService userRegistrationService;
-    @Autowired
-    private UserService userService;
+
     private UserServiceImpl userServiceImpl;
 
     public AuthenticationController() {
@@ -67,12 +65,11 @@ public class AuthenticationController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/usersname", method = RequestMethod.POST)
     public User User() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
-        return userService.findOne(userDetails.getUsername());//userService.findOne(jwtTokenUtil.getUsernameFromToken(token));
+        return userServiceImpl.findOne(userDetails.getUsername());
     }
 
     @RequestMapping(value = "/activate/{code}", method = RequestMethod.GET)
@@ -85,13 +82,11 @@ public class AuthenticationController {
         return userRegistrationService.deactivationUser(code);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/activate_email/{name}", method = RequestMethod.GET)
     public Boolean ActivateEmail(@PathVariable String name) {
         return userRegistrationService.activationUsername(name);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/deactivate_email/{name}", method = RequestMethod.GET)
     public Boolean DeactivateEmail(@PathVariable String name) {
         return userRegistrationService.deactivationUsername(name);

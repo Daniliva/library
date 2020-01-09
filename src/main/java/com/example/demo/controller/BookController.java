@@ -37,26 +37,14 @@ public class BookController {
     @Autowired
     private UserService userService;
     @Autowired
-    private JournalBookService journalBookService;
-    @Autowired
-    private BookRepository bookRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private BookRepository bookRepository;;
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<Set<Book>> list() {
         Set<Book> books1 = new HashSet<Book>(bookService.findAll());
         return ResponseEntity.ok().body(books1);
     }
 
-    /*  @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-      @RequestMapping(value = "/getBook/{id}", method = RequestMethod.GET)
-      public ResponseEntity<Book> getBook(@PathVariable("id") long bookId) {
-          return bookService.getBookById(bookId);
-      }
-  */
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<Book> createBook(@RequestBody BookDTO book) {
         Book b = bookService.save(book);
@@ -73,32 +61,27 @@ public class BookController {
     }
 
 
-   /* @PreAuthorize("hasAnyRole( 'ROLE_ADMIN')")
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Book>
-    updateBook(@RequestBody @Valid BookDTO book, @PathVariable("id") Long bookId) {
+    updateBook(@RequestBody BookDTO book, @PathVariable("id") Long bookId) {
         return bookService.update(book, bookId);
-    }*/
+    }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Book> deleteBook(@PathVariable("id") Long personId) {
         return bookService.delete(personId);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/takeABook/{id}", method = RequestMethod.GET)
     public Boolean takeABook(@PathVariable("id") long userId, @RequestBody long bookId) {
         return bookService.takeABook(bookId, userId);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/passBook/{id}", method = RequestMethod.GET)
     public Boolean passBook(@PathVariable("id") long userId, @RequestBody long bookId) {
         return bookService.passBook(bookId, userId);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @RequestMapping(value = "/takeAReservation/{id}", method = RequestMethod.GET)
     public Boolean takeAReservation(@PathVariable("id") long bookId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -107,7 +90,6 @@ public class BookController {
         return bookService.takeAReservation(bookId, user.getId());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
     @RequestMapping(value = "/passAReservation", method = RequestMethod.GET)
     public Boolean passAReservation(@RequestBody long bookId) {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -116,28 +98,18 @@ public class BookController {
         return bookService.passAReservation(bookId, user.getId());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public ResponseEntity<List<Book>> listGenre() {
-        List<Book> books = bookRepository.getFindAll();
-        return ResponseEntity.ok().body(books);
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/genre", method = RequestMethod.POST)
     public ResponseEntity<List<Book>> listGenre(@RequestBody String genre) {
         List<Book> books = bookRepository.getFindAllByGenre( genre);
         return ResponseEntity.ok().body(books);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/author", method = RequestMethod.POST)
     public ResponseEntity<List<Book>> listAuthor(@RequestBody String author) {
         List<Book> books = bookRepository.getFindAllByAuthor(author);
         return ResponseEntity.ok().body(books);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/author_and_genre", method = RequestMethod.POST)
     public ResponseEntity<List<Book>> listAuthorAndGenre(@RequestBody String author, @RequestBody String genre) {
         List<Book> books = bookRepository.getFindAllByAuthorGenre( author, genre);

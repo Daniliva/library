@@ -1,8 +1,9 @@
-package com.example.demo.service;
+package com.example.demo.service.mail;
 
 import com.example.demo.model.autorization.User;
 import com.example.demo.model.autorization.UserRegistration;
 import com.example.demo.repository.user.UserRegistrationRepository;
+import com.example.demo.service.mail.MailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,17 +24,17 @@ public class MessageSendService {
     public static void sentMessageActivate(UserRegistration userRegistration, User newUser) {
         String message = String.format(
                 "Hello, %s! \n" +
-                        "Welcome to Sweater. Please, visit next link: http://localhost:9000/activate/%s",
+                        "Welcome to Sweater. Please, visit next link: http://localhost:9000/token/activate/%s",
                 newUser.getUsername(),
                 userRegistration.getToken()
         );
         mailSender.send(newUser.getUsername(), "Activation code", message);
-    }//modification
+    }
 
     public static void sentMessageDeactivate(UserRegistration userRegistration, User newUser) {
         String message = String.format(
                 "Hello, %s! \n" +
-                        "Welcome to Sweater. Please, visit next link: http://localhost:9000/deactivate/%s",
+                        "Welcome to Sweater. Please, visit next link: http://localhost:9000/token/deactivate/%s",
                 newUser.getUsername(),
                 userRegistration.getToken()
         );

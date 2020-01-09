@@ -20,7 +20,6 @@ import javax.annotation.Resource;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(securedEnabled = true)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public WebSecurityConfig() {
@@ -48,14 +47,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public JwtAuthenticationFilter authenticationTokenFilterBean() throws Exception {
         return new JwtAuthenticationFilter();
     }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/token/*",
-                        "/generate-token",
-                        "/signup","/signup11/*","/Book/*","/Book").permitAll()
+                .antMatchers("/token/generate-token","/usersname",
+                        "/signup", "/signup/*", "/Book", "/Book/author_and_genre",
+                        "/activate/*","/deactivate/*","/modification/*")
+                .permitAll()
+                .antMatchers("JournalUser/takeAll","JournalUser",
+                        "/create","/update/*","/delete/*","/takeABook/*","/passBook/*",
+                        "/activate_email/*","/deactivate_email/*")
+                .hasRole("ROLE_ADMIN")
+                .antMatchers("/users" ,"/token/usersname",
+                        "/user/*", "/author_and_genre","JournalBook/info/*",
+                        " /passAReservation","/genre" ,"/author" ,"/author_and_genre","/takeAReservation/*")
+                .hasAnyRole("ROLE_USER", "ROLE_ADMIN")
+                .antMatchers("/get_super_admin_role/*", " /get_user_role/*", "/get_admin_role/*")
+                .hasRole("ROLE_SUPER_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
@@ -65,7 +74,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public BCryptPasswordEncoder encoder(){
+    public BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
 

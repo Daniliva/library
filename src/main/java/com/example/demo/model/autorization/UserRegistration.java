@@ -30,7 +30,6 @@ public class UserRegistration {
         return id;
     }
 
-
     public User getUser() {
         return user;
     }

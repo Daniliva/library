@@ -19,7 +19,6 @@ public class JournalBookController {
     private BookService bookService;
     @Autowired
     JournalBookRepository journalBookRepository;
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
     public ResponseEntity<BookAnswerDTO> takeAInfoBook(@PathVariable("id")long bookId) {
         return bookService.getBookById(bookId);

@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.autorization.User;
 import com.example.demo.model.journals.JournalUser;
 import com.example.demo.repository.journal.JournalUserRepository;
+import com.example.demo.service.impl.UserServiceImpl;
 import com.example.demo.service.journal.JournalUserService;
 import com.example.demo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,24 +19,22 @@ import java.util.List;
 @RequestMapping("JournalUser")
 public class JournalUserController {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userServiceImpl;
     @Autowired
     private JournalUserService journalUserService;
     @Autowired
     JournalUserRepository journalUserRepository;
 
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<JournalUser> getJournalUser() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
-        User user = userService.findOne(userDetails.getUsername());
+        User user = userServiceImpl.findOne(userDetails.getUsername());
         journalUserService.getByUserId(user);
         return ResponseEntity.ok().body(journalUserService.getByUserId(user));
 
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @RequestMapping(value = "/takeAll", method = RequestMethod.GET)
     public List<JournalUser> takeAReservation() {
         return journalUserRepository.findAll();
