@@ -1,11 +1,10 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.User;
-import com.example.demo.model.book.Book;
+import com.example.demo.model.autorization.User;
 import com.example.demo.model.journals.JournalUser;
-import com.example.demo.repo.JournalUserRepository;
-import com.example.demo.service.JournalUserService;
-import com.example.demo.service.UserService;
+import com.example.demo.repository.journal.JournalUserRepository;
+import com.example.demo.service.journal.JournalUserService;
+import com.example.demo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

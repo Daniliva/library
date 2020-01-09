@@ -1,7 +1,6 @@
-package com.example.demo.model;
+package com.example.demo.model.autorization;
 
-import com.example.demo.model.journals.JournalBook;
-import com.example.demo.model.journals.JournalUser;
+import com.example.demo.model.autorization.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
@@ -14,20 +13,13 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private long id;
-    @Column
     private String username;
-    @Column
     @JsonIgnore
     private String password;
-    @Column
     private long salary;
-    @Column
     private int age;
-    @Column
     private LocalDate dateRegistration;
-    @Column
     private long countBook;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -37,9 +29,7 @@ public class User {
             inverseJoinColumns = {
                     @JoinColumn(name = "ROLE_ID")})
     private Set<Role> roles;
-  /*  @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL  , fetch = FetchType.LAZY)
-    private JournalUser journalUser;*/
+
     public User() {
     }
     public long getId() {
@@ -89,16 +79,6 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-
-
-/*
-  public JournalUser getJournalUser() {
-        return journalUser;
-    }
-
-    public void setJournalUser(JournalUser journalUser) {
-        this.journalUser = journalUser;
-    }*/
 
     public long getCountBook() {
         return countBook;

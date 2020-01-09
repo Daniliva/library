@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.book;
 
 public class BookAnswerDTO {
     private Long     id;
@@ -8,26 +8,19 @@ public class BookAnswerDTO {
     private Long     count;
     private Long     countTake;
     private Long     countReservation;
-    private boolean  reading;
+
 
     public BookAnswerDTO(String name, String author, String genre) {
         this.name =   name;
         this.author = author;
         this.genre =  genre;
-        reading =     false;
     }
 
     public BookAnswerDTO() {
 
     }
 
-    public boolean isReading() {
-        return reading;
-    }
 
-    public void setReading(boolean reading) {
-        this.reading = reading;
-    }
 
     public String getGenre() {
         return genre;
@@ -90,9 +83,8 @@ public class BookAnswerDTO {
         return "BookAnswerDTO{" +
                 ", id = '" + id + '\'' +
                 ", name = '" + name + '\'' +
-                ", surname = '" + author + '\'' +
-                ", surname = '" + genre + '\'' +
-                ", surname = '" + reading + '\'' +
+                ", author = '" + author + '\'' +
+                ", genre = '" + genre + '\'' +
                 ", count = '" + count + '\'' +
                 ", countTake = '" + countTake + '\'' +
                 ", countReservation = '" + countReservation + '\'' +

@@ -1,7 +1,6 @@
 package com.example.demo.model.journals;
 
-import com.example.demo.model.Role;
-import com.example.demo.model.User;
+import com.example.demo.model.autorization.User;
 import com.example.demo.model.book.Book;
 
 import javax.persistence.*;

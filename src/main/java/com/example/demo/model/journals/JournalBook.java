@@ -13,11 +13,8 @@ public class JournalBook {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn
     private Book book;
-    @JoinColumn
-    private boolean bookReservation;
-    @JoinColumn
+
     private Long count;
-    @JoinColumn
     private Long countTake;
 
     public JournalBook() {
@@ -30,15 +27,6 @@ public class JournalBook {
 
     public void setCount(Long count) {
         this.count = count;
-    }
-
-
-    public boolean isBookReservation() {
-        return bookReservation;
-    }
-
-    public void setBookReservation(boolean bookReservation) {
-        this.bookReservation = bookReservation;
     }
 
     public Long getCountTake() {

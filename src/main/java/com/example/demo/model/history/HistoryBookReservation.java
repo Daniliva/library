@@ -1,14 +1,16 @@
-package com.example.demo.model.journals;
+package com.example.demo.model.history;
 
-import com.example.demo.model.User;
+import com.example.demo.model.autorization.User;
 import com.example.demo.model.book.Book;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@Table
-public class BookReservation {
+
+public class HistoryBookReservation
+{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -16,18 +18,18 @@ public class BookReservation {
     @JoinColumn
     private Book book;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn
+    @JsonIgnore
     private User user;
     @Column
     private LocalDate dateReservation;
 
-    public BookReservation(Book book, User user, LocalDate dateReservation) {
+    public HistoryBookReservation(Book book, User user, LocalDate dateReservation) {
         this.book = book;
         this.user = user;
         this.dateReservation = dateReservation;
     }
 
-    public BookReservation() {
+    public HistoryBookReservation() {
     }
 
     public long getId() {

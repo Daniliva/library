@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.book;
 
 public class BookDTO {
 
@@ -18,14 +18,6 @@ public class BookDTO {
     public BookDTO() {
 
     }
-
-   /* public boolean isReading() {
-        return reading;
-    }
-
-    public void setReading(boolean reading) {
-        this.reading = reading;
-    }*/
 
     public String getGenre() {
         return genre;

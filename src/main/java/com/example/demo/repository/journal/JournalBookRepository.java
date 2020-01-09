@@ -1,4 +1,4 @@
-package com.example.demo.repo;
+package com.example.demo.repository.journal;
 
 
 import com.example.demo.model.book.Book;

@@ -1,7 +1,7 @@
-package com.example.demo.service;
+package com.example.demo.service.user;
 
 
-import com.example.demo.model.User;
+import com.example.demo.model.autorization.User;
 import com.example.demo.dto.UserDTO;
 import org.springframework.stereotype.Service;
 
