@@ -51,19 +51,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable().
                 authorizeRequests()
-                .antMatchers("/token/generate-token","/usersname",
-                        "/signup", "/signup/*", "/Book", "/Book/author_and_genre",
-                        "/activate/*","/deactivate/*","/modification/*")
+                .antMatchers("/token/generate-token","/token/usersname",
+                        "/signup", "/signup/*", "/Book", "/Book/author_and_genre","/Book/author","/Book/genre",
+                        "/token/activate/*","/token/deactivate/*","/token/modification/*","/History/*")
                 .permitAll()
-                .antMatchers("JournalUser/takeAll","JournalUser",
-                        "/create","/update/*","/delete/*","/takeABook/*","/passBook/*",
-                        "/activate_email/*","/deactivate_email/*")
+                .antMatchers("JournalUser/takeAll","/user",
+                        "/Book/create","/Book/update/*","/Book/delete/*","/Book/takeABook/*","/Book/passBook/*",
+                        "/token/activate_email/*","/token/deactivate_email/*","/users" ,"/user/*")
                 .hasAnyRole("ROLE_ADMIN")
-                .antMatchers("/users" ,"/token/usersname",
-                        "/user/*", "/author_and_genre","JournalBook/info/*",
-                        " /passAReservation","/genre" ,"/author" ,"/author_and_genre","/takeAReservation/*")
+                .antMatchers("/token/usersname",
+                        "JournalBook/info/*",
+                        "/Book/passAReservation","/Book/takeAReservation/*","JournalBook/info/*","JournalUser")
                 .hasAnyRole("ROLE_USER", "ROLE_ADMIN")
-                .antMatchers("/get_super_admin_role/*", " /get_user_role/*", "/get_admin_role/*")
+                .antMatchers("/get_super_admin_role/*", " /get_user_role/*", "/get_admin_role/*"
+                        ,"JournalUser")
                 .hasAnyRole("ROLE_SUPER_ADMIN")
                 .anyRequest().authenticated()
                 .and()

@@ -10,6 +10,7 @@ import com.example.demo.repository.user.UserRepository;
 import com.example.demo.service.book.BookService;
 import com.example.demo.service.journal.JournalBookService;
 import com.example.demo.service.user.UserService;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("Book")
@@ -73,12 +75,12 @@ public class BookController {
     }
 
     @RequestMapping(value = "/takeABook/{id}", method = RequestMethod.GET)
-    public Boolean takeABook(@PathVariable("id") long userId, @RequestBody long bookId) {
+    public Boolean takeABook(@PathVariable("id") long userId,@RequestParam(value = "bookId") long bookId) {
         return bookService.takeABook(bookId, userId);
     }
 
     @RequestMapping(value = "/passBook/{id}", method = RequestMethod.GET)
-    public Boolean passBook(@PathVariable("id") long userId, @RequestBody long bookId) {
+    public Boolean passBook(@PathVariable("id") long userId, @RequestParam(value = "bookId") long bookId) {
         return bookService.passBook(bookId, userId);
     }
 
@@ -97,21 +99,20 @@ public class BookController {
         User user = userService.findOne(userDetails.getUsername());
         return bookService.passAReservation(bookId, user.getId());
     }
-
     @RequestMapping(value = "/genre", method = RequestMethod.POST)
-    public ResponseEntity<List<Book>> listGenre(@RequestBody String genre) {
-        List<Book> books = bookRepository.getFindAllByGenre( genre);
+    public ResponseEntity<List<Book>> listGenre(@RequestParam(value = "genre") String genre) {
+        List<Book> books = bookRepository.getFindAllByGenre(genre);
         return ResponseEntity.ok().body(books);
     }
 
     @RequestMapping(value = "/author", method = RequestMethod.POST)
-    public ResponseEntity<List<Book>> listAuthor(@RequestBody String author) {
+    public ResponseEntity<List<Book>> listAuthor(@RequestParam(value = "author") String author) {
         List<Book> books = bookRepository.getFindAllByAuthor(author);
         return ResponseEntity.ok().body(books);
     }
 
     @RequestMapping(value = "/author_and_genre", method = RequestMethod.POST)
-    public ResponseEntity<List<Book>> listAuthorAndGenre(@RequestBody String author, @RequestBody String genre) {
+    public ResponseEntity<List<Book>> listAuthorAndGenre(@RequestParam("author") String author, @RequestParam("genre") String genre) {
         List<Book> books = bookRepository.getFindAllByAuthorGenre( author, genre);
         return ResponseEntity.ok().body(books);
     }

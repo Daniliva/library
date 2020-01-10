@@ -4,10 +4,7 @@ import com.example.demo.repository.history.HistoryBookTakenRepository;
 import com.example.demo.repository.history.HistoryReservationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,22 +27,22 @@ public class HistoryController {
     }
 
     @RequestMapping(value = "/popular_author_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookAuthorTaken(@RequestBody String author) {
+    public List<Object[]> takeByMostPopularBookAuthorTaken(@RequestParam(value = "author") String author) {
         return historyBookTakenRepository.getMostPopularAuthor(author);
     }
 
     @RequestMapping(value = "/not_popular_author_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookAuthorTaken(@RequestBody String author) {
+    public List<Object[]> takeByNotPopularBookAuthorTaken(@RequestParam(value = "author") String author) {
         return historyBookTakenRepository.getNotMostPopularAuthor(author);
     }
 
     @RequestMapping(value = "/popular_genre_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookGenreTaken(@RequestBody String genre) {
+    public List<Object[]> takeByMostPopularBookGenreTaken(@RequestParam(value = "genre")String genre) {
         return historyBookTakenRepository.getMostPopularGenre(genre);
     }
 
     @RequestMapping(value = "/not_popular_genre_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookGenreTaken(@RequestBody String genre) {
+    public List<Object[]> takeByNotPopularBookGenreTaken(@RequestParam(value = "genre") String genre) {
         return historyBookTakenRepository.getNotMostPopularGenre(genre);
     }
 
@@ -60,22 +57,22 @@ public class HistoryController {
     }
 
     @RequestMapping(value = "/popular_author_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookAuthorRepository(@RequestBody String author) {
+    public List<Object[]> takeByMostPopularBookAuthorRepository(@RequestParam(value = "author") String author) {
         return historyReservationRepository.getMostPopularAuthor(author);
     }
 
     @RequestMapping(value = "/not_popular_author_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookAuthorRepository(@RequestBody String author) {
+    public List<Object[]> takeByNotPopularBookAuthorRepository(@RequestParam(value = "author")String author) {
         return historyReservationRepository.getNotMostPopularAuthor(author);
     }
 
     @RequestMapping(value = "/popular_genre_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookGenreRepository(@RequestBody String genre) {
+    public List<Object[]> takeByMostPopularBookGenreRepository(@RequestParam(value = "genre")String genre) {
         return historyReservationRepository.getMostPopularGenre(genre);
     }
 
     @RequestMapping(value = "/not_popular_genre_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookGenreRepository(@RequestBody String genre) {
+    public List<Object[]> takeByNotPopularBookGenreRepository(@RequestParam(value = "genre") String genre) {
         return historyReservationRepository.getNotMostPopularGenre(genre);
     }
 }

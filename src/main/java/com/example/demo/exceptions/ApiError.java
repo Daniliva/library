@@ -13,9 +13,7 @@ public class ApiError {
 
     private HttpStatus status;
     private String message;
-
     private String debugMessage;
-
     private List<FieldValidationError> fieldValidationErrors;
 
     ApiError() {

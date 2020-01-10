@@ -21,11 +21,8 @@ import static com.example.demo.model.constants.Constants.HEADER_STRING;
 import static com.example.demo.model.constants.Constants.TOKEN_PREFIX;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-
     @Autowired
     private UserDetailsService userDetailsService;
-
     @Autowired
     private TokenProvider jwtTokenUtil;
 

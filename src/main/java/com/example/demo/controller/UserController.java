@@ -16,11 +16,8 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class UserController {
-
-
     @Autowired
     JournalUserRepository journalUserRepository;
-
     private UserServiceImpl userServiceImpl;
     private RoleService roleService;
 
@@ -37,6 +34,11 @@ public class UserController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public User getOne(@PathVariable(value = "id") Long id) {
         return userServiceImpl.findById(id);
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public User getOne(@RequestParam(value = "username") String username) {
+        return userServiceImpl.findOne(username);
     }
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
