@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors().and().csrf().disable().
                 authorizeRequests()
                 .antMatchers("/token/generate-token","/token/usersname",
-                        "/signup", "/signup/*", "/Book", "/Book/author_and_genre","/Book/author","/Book/genre",
+                        "/signup","/signup1", "/signup/*", "/Book", "/Book/author_and_genre","/Book/author","/Book/genre",
                         "/token/activate/*","/token/deactivate/*","/token/modification/*","/History/*")
                 .permitAll()
                 .antMatchers("JournalUser/takeAll","/user",

@@ -34,6 +34,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     private UserRegistrationService userRegistrationService;
 
+    public UserServiceImpl() {
+
+    }
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
         if (user == null) {
@@ -53,14 +57,17 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public User save(UserDTO user) {
-        User newUser = createUser(user);
-        Role role = roleRepository.getByRoleName("ROLE_USER");
-        if (role == null) {
+        Role role;
+        try {
+            role = roleRepository.getByRoleName("ROLE_USER");
+        } catch (NullPointerException e) {
             role = new Role();
             role.setName("ROLE_USER");
             role.setDescription("User role");
             roleRepository.save(role);
         }
+        role = roleRepository.getByRoleName("ROLE_USER");
+        User newUser = createUser(user);
         Set<Role> setRole = new HashSet<Role>();
         setRole.add(role);
         newUser.setRoles(setRole);

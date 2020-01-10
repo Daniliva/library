@@ -15,13 +15,15 @@ import java.time.LocalDate;
 public class UserRegistrationService {
     @Autowired
     public UserRegistrationRepository userRegistrationRepository;
+    @Autowired
+    private MessageSendService messageSendService;
     public void createUserRegistration(User newUser) {
         StringService stringService = new StringService();
         String token = stringService.md5Apache(newUser.getUsername() + LocalDate.now());
         UserRegistration userRegistration;
         userRegistration = new UserRegistration(LocalDate.now(), newUser, token);
         userRegistrationRepository.save(userRegistration);
-        MessageSendService.sentMessageActivate(userRegistration, newUser);
+        messageSendService.sentMessageActivate(userRegistration, newUser);
     }
     public void modificationUserRegistration(String username) {
         StringService stringService = new StringService();
@@ -30,14 +32,14 @@ public class UserRegistrationService {
         userRegistration.setToken(token);
         userRegistration.setDateAnswer(LocalDate.now());
         userRegistrationRepository.save(userRegistration);
-        MessageSendService.sentMessageActivate(userRegistration, userRegistration.getUser());
+        messageSendService.sentMessageActivate(userRegistration, userRegistration.getUser());
     }
     public ResponseEntity<?> activationUser(String code) {
         UserRegistration userRegistration = userRegistrationRepository.getByToken(code);
         if (userRegistration == null) {
         return ResponseEntity.ok("You don't registration");
         } else if (LocalDate.now().isAfter(userRegistration.getDateAnswer().plusDays(5))) {
-            MessageSendService.sentMessageActivate(userRegistration, userRegistration.getUser());
+            messageSendService.sentMessageActivate(userRegistration, userRegistration.getUser());
             modificationUserRegistration(userRegistration.getUser().getUsername());
             return ResponseEntity.ok("To late. Please check your email!");
         }
