@@ -3,14 +3,14 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.autorization.User;
-import com.example.demo.model.journals.JournalUser;
 import com.example.demo.repository.journal.JournalUserRepository;
 import com.example.demo.repository.user.UserRepository;
-import com.example.demo.service.impl.UserServiceImpl;
-import com.example.demo.service.string.StringService;
 import com.example.demo.service.user.RoleService;
+import com.example.demo.service.user.UserRegistrationService;
 import com.example.demo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +25,8 @@ public class UserController {
     private RoleService roleService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserRegistrationService userRegistrationService;
 
     public UserController() {
         roleService = new RoleService();
@@ -47,30 +49,39 @@ public class UserController {
 
     @RequestMapping(value = "/signup", method = RequestMethod.POST)
     public Boolean saveUser(@RequestBody UserDTO user) {
-        if (userRepository.findByUsername(user.getUsername()) == null) {
+      /*  if (userRepository.findByUsername(user.getUsername()) == null) {
             StringService stringService = new StringService();
             if (stringService.validate(user.getUsername())) {
                 User saveUser = userService.save(user);
                 JournalUser journalUser = new JournalUser();
+                journalUserRepository.save(journalUser);
                 journalUser.setUserId(saveUser);
                 journalUserRepository.save(journalUser);
                 return true;
             }
-        }
-        return false;
+        }*/
+        return userService.create(user);
     }
-    @RequestMapping(value = "/signup1", method = RequestMethod.POST)
-    public Boolean saveUser1(@RequestBody UserDTO user) {
-
-            StringService stringService = new StringService();
-        return stringService.validate(user.getUsername());
-
-    }
-
 
     @RequestMapping(value = "/get_admin_role/{id}", method = RequestMethod.GET)
     public Boolean getRoleAdmin(@PathVariable(value = "id") Long id) {
         return roleService.getRoleAdmin(id);
+    }
+
+    @RequestMapping(value = "/modification", method = RequestMethod.GET)
+    public Boolean getModification() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        userRegistrationService.modificationUserRegistration(userDetails.getUsername());
+        return true;
+    }
+
+    @RequestMapping(value = "/deactivate", method = RequestMethod.GET)
+    public Boolean getDeactivate() {
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        userRegistrationService.deactivationUserRegistration(userDetails.getUsername());
+        return true;
     }
 
     @RequestMapping(value = "/get_user_role/{id}", method = RequestMethod.GET)

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @Service
 public class UserRegistrationService {
     @Autowired
-    public UserRegistrationRepository userRegistrationRepository;
+    private UserRegistrationRepository userRegistrationRepository;
     @Autowired
     private MessageSendService messageSendService;
     public void createUserRegistration(User newUser) {
@@ -32,15 +32,24 @@ public class UserRegistrationService {
         userRegistration.setToken(token);
         userRegistration.setDateAnswer(LocalDate.now());
         userRegistrationRepository.save(userRegistration);
-        messageSendService.sentMessageActivate(userRegistration, userRegistration.getUser());
+        messageSendService.sentMessageModification(userRegistration, userRegistration.getUser());
+    }
+    public void deactivationUserRegistration(String username) {
+        StringService stringService = new StringService();
+        String token = stringService.md5Apache(username + LocalDate.now());
+        UserRegistration userRegistration = userRegistrationRepository.getByUsername(username);
+        userRegistration.setToken(token);
+        userRegistration.setDateAnswer(LocalDate.now());
+        userRegistrationRepository.save(userRegistration);
+        messageSendService.sentMessageDeactivate(userRegistration, userRegistration.getUser());
     }
     public ResponseEntity<?> activationUser(String code) {
         UserRegistration userRegistration = userRegistrationRepository.getByToken(code);
         if (userRegistration == null) {
         return ResponseEntity.ok("You don't registration");
         } else if (LocalDate.now().isAfter(userRegistration.getDateAnswer().plusDays(5))) {
-            messageSendService.sentMessageActivate(userRegistration, userRegistration.getUser());
             modificationUserRegistration(userRegistration.getUser().getUsername());
+            messageSendService.sentMessageActivate(userRegistration, userRegistration.getUser());
             return ResponseEntity.ok("To late. Please check your email!");
         }
         userRegistration.setEmailReal(true);

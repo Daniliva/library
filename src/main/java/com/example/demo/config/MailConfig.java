@@ -34,6 +34,7 @@ public class MailConfig {
 
         mailSender.setHost(host);
         mailSender.setPort(port);
+
         mailSender.setUsername(username);
         mailSender.setPassword(password);
 

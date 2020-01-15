@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.book.BookAnswerDTO;
 import com.example.demo.dto.book.BookDTO;
 import com.example.demo.model.autorization.User;
 import com.example.demo.model.book.Book;
@@ -64,7 +65,7 @@ public class BookController {
 
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<Book>
+    public ResponseEntity<BookAnswerDTO>
     updateBook(@RequestBody BookDTO book, @PathVariable("id") Long bookId) {
         return bookService.update(book, bookId);
     }
@@ -104,7 +105,11 @@ public class BookController {
         List<Book> books = bookRepository.getFindAllByGenre(genre);
         return ResponseEntity.ok().body(books);
     }
-
+    @RequestMapping(value = "/name", method = RequestMethod.POST)
+    public ResponseEntity<List<Book>> listName(@RequestParam(value = "name") String name) {
+        List<Book> books = bookRepository.getFindAllByName(name);
+        return ResponseEntity.ok().body(books);
+    }
     @RequestMapping(value = "/author", method = RequestMethod.POST)
     public ResponseEntity<List<Book>> listAuthor(@RequestParam(value = "author") String author) {
         List<Book> books = bookRepository.getFindAllByAuthor(author);

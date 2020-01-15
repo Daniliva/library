@@ -4,8 +4,11 @@ package com.example.demo.service.impl;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.autorization.Role;
 import com.example.demo.model.autorization.User;
+import com.example.demo.model.journals.JournalUser;
+import com.example.demo.repository.journal.JournalUserRepository;
 import com.example.demo.repository.user.RoleRepository;
 import com.example.demo.repository.user.UserRepository;
+import com.example.demo.service.string.StringService;
 import com.example.demo.service.user.UserRegistrationService;
 import com.example.demo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +36,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     private RoleRepository roleRepository;
     @Autowired
     private UserRegistrationService userRegistrationService;
+    @Autowired
+    JournalUserRepository journalUserRepository;
 
     public UserServiceImpl() {
 
@@ -74,6 +79,21 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRepository.save(newUser);
         userRegistrationService.createUserRegistration(newUser);
         return newUser;
+    }
+    @Override
+    public boolean create(UserDTO user) {
+        if (userRepository.findByUsername(user.getUsername()) == null) {
+            StringService stringService = new StringService();
+            if (stringService.validate(user.getUsername())) {
+                User saveUser = save(user);
+                JournalUser journalUser = new JournalUser();
+                journalUserRepository.save(journalUser);
+                journalUser.setUserId(saveUser);
+                journalUserRepository.save(journalUser);
+                return true;
+            }
+        }
+        return false;
     }
 
     private User createUser(UserDTO user) {

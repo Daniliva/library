@@ -45,23 +45,24 @@ public class JournalBookService {
 
     public boolean canReservation(JournalBook journalBook, Long userId) {
         Long bookId = journalBook.getBook().getId();
-        return (getCountReservationWithBookId(LocalDate.now(), bookId) < journalBook.getCount() - journalBook.getCountTake() &&
+        return (getCountReservation(LocalDate.now(), bookId) < journalBook.getCount() - journalBook.getCountTake() &&
                 historyReservationRepository.getBookReservation(LocalDate.now(), bookId, userId).size() == 0);
     }
 
     public boolean canTakeABook(JournalBook journalBook, Long userId) {
         Long bookId = journalBook.getBook().getId();
 
-       JournalUser journalUser= journalUserService.getByUserId( userService.findById(userId));
+        JournalUser journalUser = journalUserService.getByUserId(userService.findById(userId));
 
-       Book book= journalBook.getBook();
+        Book book = journalBook.getBook();
 
-        for (Iterator<Book> it =journalUser.getBooks().iterator(); it.hasNext(); ) {
+        for (Iterator<Book> it = journalUser.getBooks().iterator(); it.hasNext(); ) {
             Book f = it.next();
-            if (f.equals(book))
-             {return false;}
+            if (f.equals(book)) {
+                return false;
+            }
         }
-        return (getCountReservationWithBookId(LocalDate.now(), bookId) <= journalBook.getCount() - journalBook.getCountTake() &&
+        return (getCountReservation(LocalDate.now(), bookId) <= journalBook.getCount() - journalBook.getCountTake() &&
                 historyReservationRepository.getBookReservation(LocalDate.now(), bookId, userId).size() <= 1);
     }
 
@@ -80,7 +81,7 @@ public class JournalBookService {
         return historyReservationRepository.getBookReservation(LocalDate.now(), bookId, userId).size() > 0;
     }
 
-    public long getCountReservationWithBookId(LocalDate date, Long bookId) {
+    public long getCountReservation(LocalDate date, Long bookId) {
         TypedQuery<Long> query = entityManager.createQuery(
                 "SELECT  COUNT(BookR) AS total " +
                         "FROM HistoryBookReservation  BookR WHERE BookR.book.id=?2  " +

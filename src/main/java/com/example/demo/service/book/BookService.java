@@ -51,12 +51,12 @@ public class BookService {
             throw new EntityNotFoundException("id-" + id);
         }
         JournalBook journalBook = journalBookService.getByBookId(book.get());
-        Long countReservation = journalBookService.getCountReservationWithBookId(LocalDate.now(), book.get().getId());
+        Long countReservation = journalBookService.getCountReservation(LocalDate.now(), book.get().getId());
         BookAnswerDTO bookAnswerDTO = BookAnswerDTOService.createBookAnswerDTO(journalBook, book.get(), countReservation);
         return ResponseEntity.ok().body(bookAnswerDTO);
     }
 
-    public ResponseEntity<Book> update(BookDTO book, Long bookId) throws EntityNotFoundException {
+    public ResponseEntity<BookAnswerDTO> update(BookDTO book, Long bookId) throws EntityNotFoundException {
         Optional<Book> b = bookRepository.findById(bookId);
         if (!b.isPresent()) {
             throw new EntityNotFoundException("id-" + bookId);
@@ -64,7 +64,15 @@ public class BookService {
         b.get().setAuthor(book.getAuthor());
         b.get().setGenre(book.getGenre());
         b.get().setName(book.getName());
-        return ResponseEntity.ok().body(bookRepository.save(b.get()));
+        JournalBook journalBook = journalBookService.getByBookId(b.get());
+        long countNotFree=journalBookService.getCountReservation(LocalDate.now(), b.get().getId())
+                + journalBook.getCount();
+        if ( countNotFree<= book.getCount()) {
+            journalBook.setCount(book.getCount());
+            journalBookService.save(journalBook);
+        }
+        bookRepository.save(b.get());
+        return getBookById(b.get().getId());
     }
 
     public Boolean takeABook(long bookId, long userId) {

@@ -25,7 +25,6 @@ public class MessageSendService {
     }
 
     public  void sentMessageActivate(UserRegistration userRegistration, User newUser) {
-
         String message = String.format(
                 "Hello, %s! \n" +
                         "Welcome to Sweater. Please, visit next link: http://localhost:9000/token/activate/%s",
@@ -51,7 +50,7 @@ public class MessageSendService {
     public  void sentMessageModification(UserRegistration userRegistration, User newUser) {
         String message = String.format(
                 "Hello, %s! \n" +
-                        "Welcome to Sweater. Please, visit next link: http://localhost:9000/modification/%s",
+                        "Welcome to Sweater. Please, visit next link: http://localhost:9000/token/modification/%s",
                 newUser.getUsername(),
                 userRegistration.getToken()
         );

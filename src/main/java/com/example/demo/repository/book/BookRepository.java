@@ -26,8 +26,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     List<Book> getFindAllByGenre(String genre);
 
     @Query("SELECT b FROM Book b " +
-            " WHERE   b.author=?1 ")
+            " WHERE  b.delete=false AND  b.author=?1 ")
     List<Book> getFindAllByAuthor(String author);
+
+    @Query("SELECT b FROM Book b " +
+            " WHERE  b.delete=false AND  b.name=?1 ")
+    List<Book> getFindAllByName(String name);
 
     @Query("SELECT b FROM Book b, JournalBook journalBook " +
             " WHERE  b.delete=false AND b.id=journalBook.book.id " +
