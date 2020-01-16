@@ -64,8 +64,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/Book/passAReservation","/Book/takeAReservation/*","JournalBook/info/*","JournalUser")
                 .hasAnyRole("ROLE_USER", "ROLE_ADMIN")
                 .antMatchers("/get_super_admin_role/*", " /get_user_role/*", "/get_admin_role/*"
-                        ,"JournalUser")
+                        )
                 .hasAnyRole("ROLE_SUPER_ADMIN")
+                .antMatchers("JournalUser","/modification","/deactivate")
+                .hasAnyRole("ROLE_SUPER_ADMIN","ROLE_USER", "ROLE_ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()

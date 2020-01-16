@@ -33,7 +33,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             " WHERE  b.delete=false AND  b.name=?1 ")
     List<Book> getFindAllByName(String name);
 
-    @Query("SELECT b FROM Book b, JournalBook journalBook " +
+    @Query("SELECT    b FROM Book b, JournalBook journalBook " +
             " WHERE  b.delete=false AND b.id=journalBook.book.id " +
             "AND  b.author=?1 and b.genre=?2  ")
     List<Book> getFindAllByAuthorGenre(String author, String genre);

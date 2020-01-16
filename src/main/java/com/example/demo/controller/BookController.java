@@ -118,7 +118,7 @@ public class BookController {
 
     @RequestMapping(value = "/author_and_genre", method = RequestMethod.POST)
     public ResponseEntity<List<Book>> listAuthorAndGenre(@RequestParam("author") String author, @RequestParam("genre") String genre) {
-        List<Book> books = bookRepository.getFindAllByAuthorGenre( author, genre);
+        List<Book> books = bookRepository.getFindAllByAuthorGenre(author, genre);
         return ResponseEntity.ok().body(books);
     }
 
