@@ -1,4 +1,4 @@
-# library
+# Library
 
 This program simulates the operation of the library.
 There are four possible user states:
