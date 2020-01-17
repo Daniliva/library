@@ -4,11 +4,11 @@ package com.example.demo.controller;
 import com.example.demo.dto.UserDTO;
 import com.example.demo.model.autorization.User;
 import com.example.demo.repository.journal.JournalUserRepository;
-import com.example.demo.repository.user.UserRepository;
 import com.example.demo.service.user.RoleService;
 import com.example.demo.service.user.UserRegistrationService;
 import com.example.demo.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
@@ -22,14 +22,14 @@ public class UserController {
     JournalUserRepository journalUserRepository;
     @Autowired
     private UserService userService;
-    private RoleService roleService;
     @Autowired
-    private UserRepository userRepository;
+    private RoleService roleService;
+
     @Autowired
     private UserRegistrationService userRegistrationService;
 
     public UserController() {
-        roleService = new RoleService();
+
     }
 
     @RequestMapping(value = "/users", method = RequestMethod.GET)
@@ -68,6 +68,7 @@ public class UserController {
         return roleService.getRoleAdmin(id);
     }
 
+    @PreAuthorize("#username == authentication.principal.username")
     @RequestMapping(value = "/modification", method = RequestMethod.GET)
     public Boolean getModification() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
@@ -88,6 +89,7 @@ public class UserController {
     public Boolean getRoleUser(@PathVariable(value = "id") Long id) {
         return roleService.getRoleUser(id);
     }
+
 
     @RequestMapping(value = "/get_super_admin_role/{id}", method = RequestMethod.GET)
     public Boolean getRoleSuperAdmin(@PathVariable(value = "id") Long id) {

@@ -14,7 +14,7 @@ public interface JournalBookRepository extends JpaRepository<JournalBook, Long> 
 
     @Query("SELECT j FROM JournalBook j  WHERE  j.book = ?1")
     JournalBook getByBookId(Book book);
-
+/*
     @Query("SELECT j FROM JournalBook j  ORDER BY j.countTake")
     List<JournalBook> getByMostPopularBook();
 
@@ -31,5 +31,5 @@ public interface JournalBookRepository extends JpaRepository<JournalBook, Long> 
     List<JournalBook> getByMostPopularBookOfGenre(String genre);
 
     @Query("SELECT j FROM JournalBook j where j.book.genre=?1 ORDER BY j.countTake  DESC")
-    List<JournalBook> getByNotPopularBookOfGenre(String genre);
+    List<JournalBook> getByNotPopularBookOfGenre(String genre);*/
 }

@@ -3,6 +3,7 @@ package com.example.demo.model.autorization;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "role")
 public class Role {
 
     @Id

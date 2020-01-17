@@ -2,9 +2,13 @@ package com.example.demo.controller;
 
 import com.example.demo.repository.history.HistoryBookTakenRepository;
 import com.example.demo.repository.history.HistoryReservationRepository;
+import com.example.demo.service.ListService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -17,62 +21,82 @@ public class HistoryController {
     private HistoryReservationRepository historyReservationRepository;
 
     @RequestMapping(value = "/popular_taken", method = RequestMethod.GET)
-    public List<Object[]> takeByMostPopularBookTaken() {
-        return historyBookTakenRepository.getMostPopular();
+    public ResponseEntity<?> takeByMostPopularBookTaken(@RequestParam(value = "limit") int limit) {
+        List historyBook = historyBookTakenRepository.getMostPopular();
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/not_popular_taken", method = RequestMethod.GET)
-    public List<Object[]> takeByNotPopularBookTaken() {
-        return historyBookTakenRepository.getNotMostPopular();
+    public ResponseEntity<?> takeByNotPopularBookTaken(@RequestParam(value = "limit") int limit) {
+        List historyBook = historyBookTakenRepository.getNotMostPopular();
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/popular_author_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookAuthorTaken(@RequestParam(value = "author") String author) {
-        return historyBookTakenRepository.getMostPopularAuthor(author);
+    public ResponseEntity<?> takeByMostPopularBookAuthorTaken(@RequestParam(value = "limit") int limit,
+                                                              @RequestParam(value = "author") String author) {
+        List historyBook = historyBookTakenRepository.getMostPopularAuthor(author);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/not_popular_author_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookAuthorTaken(@RequestParam(value = "author") String author) {
-        return historyBookTakenRepository.getNotMostPopularAuthor(author);
+    public ResponseEntity<?> takeByNotPopularBookAuthorTaken(@RequestParam(value = "limit") int limit,
+                                                             @RequestParam(value = "author") String author) {
+        List historyBook = historyBookTakenRepository.getNotMostPopularAuthor(author);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/popular_genre_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookGenreTaken(@RequestParam(value = "genre")String genre) {
-        return historyBookTakenRepository.getMostPopularGenre(genre);
+    public ResponseEntity<?> takeByMostPopularBookGenreTaken(@RequestParam(value = "limit") int limit,
+                                                             @RequestParam(value = "genre") String genre) {
+        List historyBook = historyBookTakenRepository.getMostPopularGenre(genre);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/not_popular_genre_taken", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookGenreTaken(@RequestParam(value = "genre") String genre) {
-        return historyBookTakenRepository.getNotMostPopularGenre(genre);
+    public ResponseEntity<?> takeByNotPopularBookGenreTaken(@RequestParam(value = "limit") int limit,
+                                                            @RequestParam(value = "genre") String genre) {
+        List historyBook = historyBookTakenRepository.getNotMostPopularGenre(genre);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/popular_repository", method = RequestMethod.GET)
-    public List<Object[]> takeByMostPopularBookRepository() {
-        return historyReservationRepository.getMostPopular();
+    public ResponseEntity<?> takeByMostPopularBookRepository(@RequestParam(value = "limit") int limit) {
+        List historyBook = historyReservationRepository.getMostPopular();
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/not_popular_repository", method = RequestMethod.GET)
-    public List<Object[]> takeByNotPopularBookRepository() {
-        return historyReservationRepository.getNotMostPopular();
+    public ResponseEntity<?> takeByNotPopularBookRepository(@RequestParam(value = "limit") int limit) {
+        List historyBook = historyReservationRepository.getNotMostPopular();
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/popular_author_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookAuthorRepository(@RequestParam(value = "author") String author) {
-        return historyReservationRepository.getMostPopularAuthor(author);
+    public ResponseEntity<?> takeByMostPopularBookAuthorRepository(@RequestParam(value = "limit") int limit,
+                                                                   @RequestParam(value = "author") String author) {
+        List historyBook = historyReservationRepository.getMostPopularAuthor(author);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/not_popular_author_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookAuthorRepository(@RequestParam(value = "author")String author) {
-        return historyReservationRepository.getNotMostPopularAuthor(author);
+    public ResponseEntity<?> takeByNotPopularBookAuthorRepository(@RequestParam(value = "limit") int limit,
+                                                                  @RequestParam(value = "author") String author) {
+        List historyBook = historyReservationRepository.getNotMostPopularAuthor(author);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/popular_genre_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByMostPopularBookGenreRepository(@RequestParam(value = "genre")String genre) {
-        return historyReservationRepository.getMostPopularGenre(genre);
+    public ResponseEntity<?> takeByMostPopularBookGenreRepository(@RequestParam(value = "limit") int limit,
+                                                                  @RequestParam(value = "genre") String genre) {
+        List historyBook = historyReservationRepository.getMostPopularGenre(genre);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 
     @RequestMapping(value = "/not_popular_genre_repository", method = RequestMethod.POST)
-    public List<Object[]> takeByNotPopularBookGenreRepository(@RequestParam(value = "genre") String genre) {
-        return historyReservationRepository.getNotMostPopularGenre(genre);
+    public ResponseEntity<?> takeByNotPopularBookGenreRepository(@RequestParam(value = "limit") int limit,
+                                                                 @RequestParam(value = "genre") String genre) {
+        List historyBook = historyReservationRepository.getNotMostPopularGenre(genre);
+        return ListService.convertToResponseEntity(historyBook, limit);
     }
 }

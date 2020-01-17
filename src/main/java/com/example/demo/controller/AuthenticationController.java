@@ -7,12 +7,9 @@ import com.example.demo.model.autorization.AuthToken;
 import com.example.demo.model.autorization.LoginUser;
 import com.example.demo.model.autorization.User;
 import com.example.demo.repository.user.UserRegistrationRepository;
-import com.example.demo.service.impl.UserServiceImpl;
 import com.example.demo.service.user.UserRegistrationService;
 import com.example.demo.service.user.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -36,11 +33,10 @@ public class AuthenticationController {
     private TokenProvider jwtTokenUtil;
     @Autowired
     private UserRegistrationService userRegistrationService;
-
-    private UserServiceImpl userServiceImpl;
+    @Autowired
+    private UserService userService;
 
     public AuthenticationController() {
-        userServiceImpl = new UserServiceImpl();
     }
 
     @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
@@ -69,7 +65,7 @@ public class AuthenticationController {
     public User User() {
         UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
-        return userServiceImpl.findOne(userDetails.getUsername());
+        return userService.findOne(userDetails.getUsername());
     }
 
     @RequestMapping(value = "/activate/{code}", method = RequestMethod.GET)
