@@ -2,10 +2,21 @@ package com.example.demo.dto;
 
 public class UserDTO {
 
+
     private String username;
     private String password;
     private int age;
     private int salary;
+
+    public UserDTO(String username, String password, int age, int salary) {
+        this.username = username;
+        this.password = password;
+        this.age = age;
+        this.salary = salary;
+    }
+
+    public UserDTO() {
+    }
 
     public String getUsername() {
         return username;

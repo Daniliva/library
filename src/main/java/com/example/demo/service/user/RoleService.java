@@ -17,14 +17,14 @@ public class RoleService {
     private RoleRepository roleRepository;
     @Autowired
     private UserRepository userRepository;
-    private UserServiceImpl userServiceImpl;
+    @Autowired
+    private UserService userService;
 
-    public RoleService() {
-       userServiceImpl = new UserServiceImpl();
+    public RoleService(){
     }
 
     public Boolean getRoleAdmin(Long id) {
-        User user = userServiceImpl.findById(id);
+        User user = userService.findById(id);
         Role role = roleRepository.getByRoleName("ROLE_ADMIN");
         if (role == null) {
             role = new Role();
@@ -40,7 +40,7 @@ public class RoleService {
     }
 
     public Boolean getRoleUser(Long id) {
-        User user = userServiceImpl.findById(id);
+        User user = userService.findById(id);
         Role role = roleRepository.getByRoleName("ROLE_USER");
         if (role == null) {
             role = new Role();
@@ -56,7 +56,7 @@ public class RoleService {
     }
 
     public Boolean getRoleSuperAdmin(Long id) {
-        User user = userServiceImpl.findById(id);
+        User user = userService.findById(id);
         Role role = roleRepository.getByRoleName("ROLE_SUPER_ADMIN");
         if (role == null) {
             role = new Role();
